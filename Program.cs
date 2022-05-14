@@ -38,7 +38,7 @@ namespace WaitAnyApp
             }   
             catch(Exception E)
             {
-                        Console.WriteLine("Возникла ошибка выполнения:\n" + E.Message)
+                Console.WriteLine("Возникла ошибка выполнения:\n" + E.Message);
             }
         }
 
