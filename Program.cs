@@ -8,31 +8,41 @@ namespace WaitAnyApp
     class Program
     {
 
-        static public int countofTasks = 10;
+        static public int countofTasks = 25;
         static void Main(string[] args)
         {
-            var tasks = new List<Task<string>>();
-            var taskGenerator = new TaskGenerator();
-            for (int i = 0; i < countofTasks; i++)
+            try
             {
-                var newtask = taskGenerator.createTask($"task -- {i+1}");
-                tasks.Add(newtask);
-            }
-            tasks.ForEach(t => t.Start());
-            var firstTask = Task.WaitAny(tasks.ToArray());
-           
-            var result = "";
-            if (firstTask >= 0)
+                var tasks = new List<Task<string>>();
+                var taskGenerator = new TaskGenerator();
+                for (int i = 0; i < countofTasks; i++)
+                {
+                    var newtask = taskGenerator.createTask($"task -- {i + 1}");
+                    tasks.Add(newtask);
+                }
+
+                tasks.ForEach(t => t.Start());
+                var firstTask = Task.WaitAny(tasks.ToArray());
+
+                var result = String.Empty;
+                if (firstTask >= 0)
+                {
+                    Task<string> task = tasks[firstTask];
+                    result = task.Result;
+                }
+                else
+                {
+                    result = "Возникла ошибка вычисления";
+                }
+                Console.WriteLine(result);
+            }   
+            catch(Exception E)
             {
-                Task<string> task = tasks[firstTask];
-                result = task.Result;
+                        Console.WriteLine("Возникла ошибка выполнения:\n" + E.Message)
             }
-            else
-            {
-                result = "Возникла ошибка вычисления";
-            }
-            Console.WriteLine(result);
         }
+
+
     }
     class TaskGenerator
     {
